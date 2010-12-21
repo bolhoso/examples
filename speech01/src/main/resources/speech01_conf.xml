@@ -8,6 +8,15 @@
         <value>RawSentence *</value>
       </list>
     </property>
+
+    <property name="dispatcher" ref="sentenceDispatcher"/>
+    <property name="outputStreamName" value="lookMaSentenceCatcher"/>
   </bean>
+
+  <bean id="sentenceDispatcher" class="io.s4.dispatcher.Dispatcher" init-method="init">
+    <property name="eventEmitter" ref="commLayerEmitter"/>
+    <property name="loggerName" value="s4"/>
+  </bean>
+
 
 </beans>
