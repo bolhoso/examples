@@ -15,6 +15,8 @@
  */
 package io.s4.example.speech01;
 
+import io.s4.persist.Persister;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,14 +26,19 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import io.s4.persist.Persister;
-
-public class DirectToFilePersister implements Persister {
-    private String outputFilename;
+/**
+ * Persist a speech to a file in the disk.
+ */
+public class SpeechFilePersister implements Persister {
+    private String outputFilePrefix;
     private int persistCount;
 
-    public void setOutputFilename(String outputFilename) {
-        this.outputFilename = outputFilename;
+    public void setOutputFilePrefix (String outputFilename) {
+        this.outputFilePrefix = outputFilename;
+    }
+    
+    public String getOutputFilePrefix (String outputFilename) {
+        return this.outputFilePrefix;
     }
 
     @Override
@@ -92,10 +99,8 @@ public class DirectToFilePersister implements Persister {
     	
         FileWriter fw = null;
         try {
-        	Sentence theSentence = (Sentence) value;
-        	
-            fw = new FileWriter(outputFilename, true);
-            fw.append ("Look ma', no hands: " + theSentence.getText());
+       	            fw = new FileWriter(outputFilePrefix, true);
+            fw.append ("Look ma', no hands: " + (String) value);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             Logger.getLogger("s4").error(e);

@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans             http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
+  <!-- Process the incoming sentences, log them and send to SpeechPE -->
   <bean id="eventCatcher" class="io.s4.example.speech01.SentenceReceiverPE">
     <property name="keys">
       <list>
@@ -10,25 +11,29 @@
     </property>
 
     <property name="dispatcher" ref="sentenceDispatcher"/>
-    <property name="outputStreamName" value="RawLookMaSentence"/>
+    <property name="outputStreamName" value="Sentence"/>
   </bean>
-  
-  <bean id="eventCatcherLookMa" class="io.s4.example.speech01.LookMaSentenceReceiverPE">
+
+  <!-- Aggregate and write speeches to the disk -->  
+  <bean id="speechPE" class="io.s4.example.speech01.SpeechPE">
     <property name="keys">
       <list>
-        <value>RawLookMaSentence *</value>
+        <value>Sentence speechId</value>
       </list>
     </property>
     
-    <property name="persister" ref="fileSentencePersister" />    
+    <property name="persister" ref="fileSpeechPersister" />    
   </bean>  
 
+  <!-- A dummy partitioner, just for testing purposes -->
   <bean id="defaultS4Partitioner" class="io.s4.dispatcher.partitioner.DummyPartitioner"/>
   
-  <bean id="fileSentencePersister" class="io.s4.example.speech01.DirectToFilePersister">
-  	<property name="outputFilename" value="/tmp/phrases.txt"/>
+  <!-- Persist speeches to a file -->
+  <bean id="fileSpeechPersister" class="io.s4.example.speech01.SpeechFilePersister">
+  	<property name="outputFilePrefix" value="/tmp/speeches/speech-"/>
   </bean>
 
+  <!-- Dispatch sentences using a dummy partitioner without transformations -->
   <bean id="sentenceDispatcher" class="io.s4.dispatcher.Dispatcher" init-method="init">
 	<property name="partitioners">
       <list>
