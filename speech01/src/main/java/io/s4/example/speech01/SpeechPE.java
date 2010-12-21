@@ -49,7 +49,7 @@ public class SpeechPE extends AbstractPE {
 	    System.out.println("Arrived sentence at SpeechPE! " + sentence.getSpeechId() + " -> " + sentence.getId());
 		this.speechKey = sentence.getSpeechId();
 		
-		this.addSpeechSentence (sentence.getText());
+		this.addSpeechSentence (sentence.getText() + "\n");
 		Logger.getLogger("s4").info ("Processed sentence " + sentence.getId() + 
 				" from speech " + this.speechKey);
 	}

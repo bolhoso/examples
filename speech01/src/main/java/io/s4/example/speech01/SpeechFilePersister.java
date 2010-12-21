@@ -99,8 +99,8 @@ public class SpeechFilePersister implements Persister {
     	
         FileWriter fw = null;
         try {
-       	            fw = new FileWriter(outputFilePrefix, true);
-            fw.append ("Look ma', no hands: " + (String) value);
+       	    fw = new FileWriter(outputFilePrefix + key);
+            fw.write ((String) value);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             Logger.getLogger("s4").error(e);

@@ -11,22 +11,36 @@
     </property>
 
     <property name="dispatcher" ref="sentenceDispatcher"/>
-    <property name="outputStreamName" value="Sentence"/>
+    <property name="outputStreamName" value="SpeechSentence"/>
   </bean>
 
   <!-- Aggregate and write speeches to the disk -->  
   <bean id="speechPE" class="io.s4.example.speech01.SpeechPE">
     <property name="keys">
       <list>
-        <value>Sentence speechId</value>
+        <value>SpeechSentence speechId</value>
       </list>
     </property>
     
+    <property name="outputFrequencyByEventCount" value="1"/>
     <property name="persister" ref="fileSpeechPersister" />    
   </bean>  
 
-  <!-- A dummy partitioner, just for testing purposes -->
-  <bean id="defaultS4Partitioner" class="io.s4.dispatcher.partitioner.DummyPartitioner"/>
+  <!-- This partitioner uses the speechId to split events -->
+  <bean id="speechPartitioner" class="io.s4.dispatcher.partitioner.DefaultPartitioner">
+    <property name="streamNames">
+      <list>
+        <value>SpeechSentence</value>
+      </list>
+    </property>
+    <property name="hashKey">
+      <list>
+        <value>speechId</value>
+      </list>
+    </property>
+    <property name="hasher" ref="hasher"/>
+    <property name="debug" value="false"/>
+  </bean>
   
   <!-- Persist speeches to a file -->
   <bean id="fileSpeechPersister" class="io.s4.example.speech01.SpeechFilePersister">
@@ -37,7 +51,7 @@
   <bean id="sentenceDispatcher" class="io.s4.dispatcher.Dispatcher" init-method="init">
 	<property name="partitioners">
       <list>
-        <ref bean="defaultS4Partitioner"/>
+        <ref bean="speechPartitioner"/>
       </list>
     </property>
       
