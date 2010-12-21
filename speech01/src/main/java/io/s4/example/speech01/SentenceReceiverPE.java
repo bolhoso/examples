@@ -29,17 +29,8 @@ public class SentenceReceiverPE extends AbstractPE {
     			sentence.getId(), sentence.getSpeechId(), sentence.getText(),
     			sentence.getTime(), sentence.getLocation());
     	
-    	Sentence sent2 = new Sentence();
-    	sent2.setId(sentence.getId());
-    	sent2.setText ("Look, ma, I can dispatch events: " + sentence.getText());
-    	sent2.setTime (sentence.getTime());
-    	
-    	if (this.dispatcher != null)
-    		System.out.println("Dispatcher is not null");
-    	
-    	System.out.println("Out stream name: " + this.outputStreamName);
-    	
-//        dispatcher.dispatchEvent(outputStreamName, sent2);
+        dispatcher.dispatchEvent(outputStreamName, sentence);
+
     }
     
     @Override

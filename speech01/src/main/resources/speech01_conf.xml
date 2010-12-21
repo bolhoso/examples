@@ -10,10 +10,32 @@
     </property>
 
     <property name="dispatcher" ref="sentenceDispatcher"/>
-    <property name="outputStreamName" value="lookMaSentenceCatcher"/>
+    <property name="outputStreamName" value="RawLookMaSentence"/>
+  </bean>
+  
+  <bean id="eventCatcherLookMa" class="io.s4.example.speech01.LookMaSentenceReceiverPE">
+    <property name="keys">
+      <list>
+        <value>RawLookMaSentence *</value>
+      </list>
+    </property>
+    
+    <property name="persister" ref="fileSentencePersister" />    
+  </bean>  
+
+  <bean id="defaultS4Partitioner" class="io.s4.dispatcher.partitioner.DummyPartitioner"/>
+  
+  <bean id="fileSentencePersister" class="io.s4.example.speech01.DirectToFilePersister">
+  	<property name="outputFilename" value="/tmp/phrases.txt"/>
   </bean>
 
   <bean id="sentenceDispatcher" class="io.s4.dispatcher.Dispatcher" init-method="init">
+	<property name="partitioners">
+      <list>
+        <ref bean="defaultS4Partitioner"/>
+      </list>
+    </property>
+      
     <property name="eventEmitter" ref="commLayerEmitter"/>
     <property name="loggerName" value="s4"/>
   </bean>
